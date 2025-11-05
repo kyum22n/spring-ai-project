@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.interview.dao.InterviewQuestionDao">
+
+  <!-- 모든 질문 목록 가져오기 -->
+  <select id="selectAllQuestions" resultType="InterviewQuestions">
+    <![CDATA[ 
+    SELECT 
+    rnum, question_id, session_id, question_text, created_at
+    FROM (
+      SELECT rownum, question_id, session_id, question_text, created_at
+      FROM (
+          SELECT question_id, session_id, question_text, created_at
+          FROM interview_questions
+          ORDER BY created_at DESC
+        )
+      WHERE rownum < #{endRowNo} 
+      )
+    WHERE rnum > #{startRowNo}
+    ]]> 
+  </select>
+  
+  <!-- 면접 리포트에 해당하는 질문 목록 가져오기 -->
+  <select id="selectAllQuestionsBySessionId" resultType="InterviewQuestions">
+    <![CDATA[ 
+    SELECT 
+    rnum, question_id, session_id, question_text, created_at
+    FROM (
+      SELECT rownum, question_id, session_id, question_text, created_at
+      FROM (
+          SELECT question_id, session_id, question_text, created_at
+          FROM interview_questions
+          WHERE session_id = #{sessionId}
+          ORDER BY created_at DESC
+        )
+      WHERE rownum < #{endRowNo} 
+      )
+    WHERE rnum > #{startRowNo}
+    ]]> 
+  </select>
+
+  <!-- 질문 하나 선택 -->
+  <select id="selecInterviewQuestions" resultType="InterviewQuestions">
+    SELECT question_id, session_id, question_text, created_at
+    FROM interview_questions
+    WHERE question_id = #{questionId}
+  </select>
+
+  <!-- 질문 저장 -->
+  <insert id="insertInterviewQuestion">
+    INSERT INTO interview_questions
+      (question_id, session_id, question_text, created_at)
+    VALUES (#{questionId}, #{sessionId}, #{questionText}, #{createdAt})
+  </insert>
+
+  <!-- 질문 삭제 -->
+  <delete id="deleteInterviewQuestion">
+    DELETE FROM interview_questions
+    WHERE question_id = #{questionId}
+  </delete>
+
+</mapper>

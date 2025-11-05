@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+  <settings>
+    <setting name="mapUnderscoreToCamelCase" value="true"/>
+    <setting name="jdbcTypeForNull" value="NULL" />
+    <setting name="logImpl" value="STDOUT_LOGGING"/>
+  </settings>
+
+  <typeAliases>
+    <typeAlias type="com.example.demo.interview.dto.InterviewSession" alias="InterviewSession"/>
+    <typeAlias type="com.example.demo.interview.dto.InterviewAnswers" alias="InterviewAnswers"/>
+    <typeAlias type="com.example.demo.interview.dto.InterviewQuestions" alias="InterviewQuestions"/>
+  </typeAliases>
+</configuration>

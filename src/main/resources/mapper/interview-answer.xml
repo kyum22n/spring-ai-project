@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.interview.dao.InterviewAnswerDao">
+
+  <!-- 모든 답변 목록 가져오기 -->
+  <select id="selectAllAnswers" resultType="InterviewAnswers">
+    <![CDATA[ 
+    SELECT rnum, answer_id, question_id, session_id, answer_text, ai_feedback, ai_score, created_at
+    FROM (
+      SELECT rownum, answer_id, question_id, session_id, answer_text, ai_feedback, ai_score, created_at
+      FROM (
+          SELECT answer_id, question_id, session_id, answer_text, ai_feedback, ai_score, created_at
+          FROM interview_answers
+          ORDER BY created_at DESC
+        )
+      WHERE rownum < #{endRowNo} 
+      )
+    WHERE rnum > #{startRowNo}
+    ]]> 
+  </select>
+  
+  <!-- 면접 리포트에 해당하는 답변 목록 가져오기 -->
+  <select id="selectAllAnswers" resultType="InterviewAnswers">
+    <![CDATA[ 
+    SELECT rnum, answer_id, question_id, session_id, answer_text, ai_feedback, ai_score, created_at
+    FROM (
+      SELECT rownum, answer_id, question_id, session_id, answer_text, ai_feedback, ai_score, created_at
+      FROM (
+          SELECT answer_id, question_id, session_id, answer_text, ai_feedback, ai_score, created_at
+          FROM interview_answers
+          WHERE session_id = #{sessionId}
+          ORDER BY created_at DESC
+        )
+      WHERE rownum < #{endRowNo} 
+      )
+    WHERE rnum > #{startRowNo}
+    ]]> 
+  </select>
+
+  <!-- 답변 하나 선택 -->
+  <select id="selecInterviewAnswers" resultType="InterviewAnswers">
+    SELECT answer_id, question_id, session_id, answer_text, ai_feedback, ai_score, created_at
+    FROM interview_answers
+    WHERE answer_id = #{answerId}
+  </select>
+
+  <!-- 답변 제출 -->
+  <insert id="insertInterviewAnswer" parameterType="InterviewAnswers">
+    INSERT INTO 
+      (answer_id, question_id, session_id, answer_text, ai_feedback, ai_score, created_at)
+    VALUES 
+      (#{answerId}, #{questionId}, #{sessionId}, #{answerText}, #{aiFeedback}, #{aiScore}, #{createdAt})
+  </insert>
+
+  <!-- 답변 삭제 -->
+  <delete id="deleteInterviewAnswer">
+    DELETE FROM interview_answers
+    WHERE answer_id = #{answerId}
+  </delete>
+
+</mapper>

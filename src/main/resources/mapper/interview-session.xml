@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.interview.dao.InterviewSessionDao">
+
+  <!-- 전체 면접 리포트 목록 가져오기 -->
+  <select id="selecAllInterviewSession" resultType="InterviewSession">
+    <![CDATA[ 
+    SELECT 
+    rnum, session_id, user_id, type, target_job, target_company, report_summary, feedback_vector, created_at
+    FROM (
+      SELECT rownum, session_id, user_id, type, target_job, target_company, report_summary, feedback_vector, created_at
+      FROM (
+          SELECT session_id, user_id, type, target_job, target_company, report_summary, feedback_vector, created_at
+          FROM interview_sessions
+          ORDER BY created_at DESC
+        )
+      WHERE rownum < #{endRowNo} 
+      )
+    WHERE rnum > #{startRowNo}
+    ]]> 
+  </select>
+  
+  <!-- 면접 리포트 자세히 보기 -->
+  <select id="selecInterviewSession" resultType="InterviewSession">
+    SELECT session_id, user_id, type, target_job, target_company, 
+      report_summary, feedback_vector, created_at
+    FROM interview_sessions
+    WHERE session_id = #{sessionId}
+  </select>
+
+  <!-- 면접 생성하기 -->
+  <insert id="insertInterviewSession" parameterType="InterviewSession">
+    INSERT INTO interview_sessions (
+      session_id, user_id, type, target_job, target_company, 
+      report_summary, feedback_vector, created_at
+    ) VALUES (
+      #{sessionId}, #{userId}, #{type}, #{targetJob}, #{targetCompany}, 
+      #{reportSummary}, #{feedbackVector}, #{createdAt}
+    )
+  </insert>
+
+  <!-- 면접 요약/피드백 생성 -->
+  <update id="updateSessionFeedback" parameterType="InterviewSession">
+    UPDATE interview_sessions
+    SET
+    WHERE 
+  </update>
+
+  <!-- 면접 삭제 -->
+  <delete id="deleteInterviewSession">
+    DELETE FROM interview_sessions
+    WHERE session_id = #{sessionId}
+  </delete>
+
+</mapper>
