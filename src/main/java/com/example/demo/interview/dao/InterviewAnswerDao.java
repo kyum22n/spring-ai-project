@@ -12,10 +12,10 @@ public interface InterviewAnswerDao {
   List<InterviewAnswers> selectAllAnswers();
   
   // 면접 리포트에 해당하는 답변 목록
-  List<InterviewAnswers> selectAllAnswers(int sessionId);
+  List<InterviewAnswers> selectAllAnswersBySessionId(int sessionId);
 
   // 답변 목록 단건 조회
-  InterviewAnswers selecInterviewAnswers(int answerId);
+  InterviewAnswers selectInterviewAnswers(int answerId);
 
   // 답변 + 피드백 저장
   int insertInterviewAnswer(InterviewAnswers interviewAnswer);

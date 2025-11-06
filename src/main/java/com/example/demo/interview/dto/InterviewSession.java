@@ -12,6 +12,6 @@ public class InterviewSession {
   private String type;  //면접 유형(종합/직무)
   private String targetJob;  //희망 직무
   private String targetCompany; //희망 기업
-  private Map<String, Object> feedback; //면접 피드백
+  private Map<String, Object> reportFeedback; //면접 피드백
   private LocalDateTime createdAt;  //생성일
 }

@@ -1,10 +1,6 @@
 plugins {
 	id 'java'
-<<<<<<< HEAD
-	id 'org.springframework.boot' version '3.4.10'
-=======
 	id 'org.springframework.boot' version '3.4.11'
->>>>>>> 1fd3fbd (ai 취업 컨설턴트 면접)
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -35,29 +31,21 @@ ext {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-<<<<<<< HEAD
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springframework.ai:spring-ai-starter-model-openai'
-=======
 
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.ai:spring-ai-starter-model-openai'
-	
->>>>>>> 1fd3fbd (ai 취업 컨설턴트 면접)
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-<<<<<<< HEAD
-=======
 
 	// MyBatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
->>>>>>> 1fd3fbd (ai 취업 컨설턴트 면접)
 }
 
 dependencyManagement {

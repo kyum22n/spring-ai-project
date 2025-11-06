@@ -14,11 +14,11 @@ public interface InterviewQuestionDao {
   // 면접 리포트에 해당하는 모든 질문 목록
   List<InterviewQuestions> selectAllQuestionsBySessionId(int sessionId);
 
-  // 질문 목록 단건 조회
-  InterviewQuestions selectInterviewQuestions(int answerId);
+  // 질문 단건 조회
+  InterviewQuestions selectInterviewQuestion(int questionId);
 
   // 질문 저장
-  int insertInterviewQuestion(InterviewQuestions interviewQuestion);
+  int insertInterviewQuestion(InterviewQuestions interviewQuestions);
 
   // 질문 삭제
   int deleteInterviewQuestion(int questionId);
