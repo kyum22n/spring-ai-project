@@ -34,7 +34,7 @@
   <!-- 면접 요약/피드백 생성 -->
   <update id="updateSessionFeedback" parameterType="InterviewSession">
     UPDATE interview_sessions
-    SET report_feedback = CAST(#{reportFeedback, jdbcType=OTHER} AS JSONB)
+    SET report_feedback = #{reportFeedback}
     WHERE session_id = #{sessionId}
   </update>
 

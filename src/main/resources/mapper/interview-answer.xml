@@ -7,14 +7,14 @@
 
   <!-- 모든 답변 목록 가져오기 -->
   <select id="selectAllAnswers" resultType="InterviewAnswers">
-    SELECT answer_id, question_id, session_id, answer_text, ai_feedback, created_at
+    SELECT answer_id, question_id, session_id, answer_text, answer_feedback, created_at
     FROM interview_answers
     ORDER BY created_at DESC
   </select>
   
   <!-- 면접 리포트에 해당하는 답변 목록 가져오기 -->
   <select id="selectAllAnswersBySessionId" resultType="InterviewAnswers">
-    SELECT answer_id, question_id, session_id, answer_text, ai_feedback, created_at
+    SELECT answer_id, question_id, session_id, answer_text, answer_feedback, created_at
     FROM interview_answers
     WHERE session_id = #{sessionId}
     ORDER BY created_at DESC
@@ -22,7 +22,7 @@
 
   <!-- 답변 하나 선택 -->
   <select id="selectInterviewAnswers" resultType="InterviewAnswers">
-    SELECT answer_id, question_id, session_id, answer_text, ai_feedback, created_at
+    SELECT answer_id, question_id, session_id, answer_text, answer_feedback, created_at
     FROM interview_answers
     WHERE answer_id = #{answerId}
   </select>
@@ -30,15 +30,15 @@
   <!-- 답변 제출 + 피드백 저장 -->
   <insert id="insertInterviewAnswer" parameterType="InterviewAnswers">
     INSERT INTO interview_answers
-      (answer_id, question_id, session_id, answer_text, ai_feedback, created_at)
+      (answer_id, question_id, session_id, answer_text, answer_feedback, created_at)
     VALUES 
-      (#{answerId}, #{questionId}, #{sessionId}, #{answerText}, #{aiFeedback}, #{createdAt})
+      (#{answerId}, #{questionId}, #{sessionId}, #{answerText}, #{answerFeedback}, #{createdAt})
   </insert>
 
   <!-- AI 분석 결과 반영해서 피드백만 갱신 -->
   <update id="updateAnswerFeedback" parameterType="InterviewAnswers">
     UPDATE interview_answers
-    SET ai_feedback = CAST(#{aiFeedback, jdbcType=OTHER} AS JSONB)
+    SET answer_feedback = #{answerFeedback}
     WHERE answer_id = #{answerId}
   </update>
 

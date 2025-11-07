@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.interview.dto.InterviewAnswers;
 import com.example.demo.interview.dto.InterviewQuestions;
 import com.example.demo.interview.dto.InterviewSession;
 import com.example.demo.interview.service.InterviewAnswerService;
@@ -117,6 +118,38 @@ public class InterviewController {
     interviewQuestionService.removeInterviewQuestion(questionId);
   }
   
+  // 면접 답변 업로드 + AI 피드백 생성
+  @PostMapping(
+    value = "/submitAnswer",
+    consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  public void submitAnswer(
+    @RequestParam("audioFile") MultipartFile audioFile,
+    @RequestParam("imagFile") MultipartFile imagFile,
+    @RequestParam("questionId") int questionId,
+    @RequestParam("sessionId") int sessionId
+  ) throws Exception {
+    interviewAnswerService.processInterviewAnswers(audioFile, imagFile, questionId, sessionId);
+  }
   
+
+  // 면접 리포츠에 해당하는 답변 목록 조회
+  @GetMapping("/answer-list")
+  public List<InterviewAnswers> answerList(@RequestParam("sessionId") int sessionId) {
+    return interviewAnswerService.getAllAnswersBySessionId(sessionId);
+  }
+
+  // 면접 답변 단건 조회
+  @GetMapping("/answer-one")
+  public InterviewAnswers answerOne(@RequestParam("answerId") int answerId) {
+    return interviewAnswerService.getOneInterviewAnswer(answerId);
+  }
+  
+  // 답변 삭제
+  @DeleteMapping("/delete-answer")
+  public void deleteAnswer(@RequestParam("answerId") int answerId) {
+    interviewAnswerService.removeInterviewAnswer(answerId);
+  }
   
 }

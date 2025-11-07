@@ -13,6 +13,7 @@ import com.example.demo.interview.dao.InterviewAnswerDao;
 import com.example.demo.interview.dao.InterviewSessionDao;
 import com.example.demo.interview.dto.InterviewAnswers;
 import com.example.demo.interview.dto.InterviewSession;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,13 +49,13 @@ public class InterviewSessionService {
 
     // 답변 피드백 요약 텍스트 구성
     StringBuilder sb = new StringBuilder();
+    // extractSummary() 호출용
+    ObjectMapper mapper = new ObjectMapper();
+
     for (int i=0; i<answers.size(); i++) {
       InterviewAnswers ans = answers.get(i);
       
-      // 답변의 항목이 존재할 경우 summary 키의 값을 가져옴
-      Object summary = (ans.getAiFeedback() != null)
-              ? ans.getAiFeedback().get("summary")
-              : ans.getAnswerText();
+      String summary = extractSummary(ans.getAnswerFeedback(), ans.getAnswerText(), mapper);
 
       sb.append("""
           Q%d: %s
@@ -85,10 +86,19 @@ public class InterviewSessionService {
       .call()
       .entity(new MapOutputConverter());
 
+    // Map → JSON 문자열 변환 (리포트 저장용 objectMapper)
+    ObjectMapper objectMapper = new ObjectMapper();
+    String reportFeedbackJson = null;
+    try {
+        reportFeedbackJson = objectMapper.writeValueAsString(reportMap);
+    } catch (Exception e) {
+        log.error("리포트 JSON 직렬화 오류", e);
+    }
+
     // DB 저장
     InterviewSession session = new InterviewSession();
     session.setSessionId(sessionId);
-    session.setReportFeedback(reportMap);
+    session.setReportFeedback(reportFeedbackJson);
     interviewSessionDao.updateSessionFeedback(session);
 
     return session;
@@ -116,4 +126,20 @@ public class InterviewSessionService {
     interviewSessionDao.deleteInterviewSession(sessionId);
   }
 
+  // JSON 문자열에서 "summary" 값을 꺼내기
+  private String extractSummary(String feedbackJson, String fallback, ObjectMapper mapper) {
+    if (feedbackJson == null || feedbackJson.isBlank()) {
+      return fallback;
+    }
+
+    try {
+      Map<String, Object> map = mapper.readValue(feedbackJson, Map.class);
+      Object s = map.get("summary");
+      return (s != null) ? String.valueOf(s) : fallback;
+    } catch (Exception e) {
+      log.warn("answerFeedback JSON 파싱 실패. fallback 사용", e);
+      return fallback;
+    }
+      
+  }
 }
